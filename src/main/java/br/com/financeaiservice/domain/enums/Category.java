@@ -10,5 +10,6 @@ public enum Category {
     HOUSE,
     SCHOOL,
     CHILDREN,
-    PERSONAL
+    PERSONAL,
+    MARKET
 }
