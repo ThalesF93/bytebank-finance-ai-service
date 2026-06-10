@@ -1,0 +1,19 @@
+services:
+  database:
+    image: postgres:16
+    container_name: finance_ai-db
+    environment:
+      POSTGRES_DB: finance_ai_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - operation_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d budget-db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+volumes:
+  operation_data:
