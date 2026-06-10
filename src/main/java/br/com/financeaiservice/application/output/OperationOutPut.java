@@ -11,8 +11,8 @@ public record OperationOutPut(UUID operationId, UUID customerId, String descript
 
         public static OperationOutPut from(Operation operation){
             return new OperationOutPut(
-                    operation.getCustomerID(),
                     operation.getOperationId(),
+                    operation.getCustomerID(),
                     operation.getDescription(),
                     operation.getAmount(),
                     operation.getCategory(),
