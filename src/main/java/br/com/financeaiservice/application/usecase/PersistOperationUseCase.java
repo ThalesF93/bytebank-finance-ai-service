@@ -6,6 +6,7 @@ import br.com.financeaiservice.application.output.OperationOutPut;
 import br.com.financeaiservice.domain.entity.Operation;
 import br.com.financeaiservice.infrastructure.database.OperationRepositoryImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,7 @@ public class PersistOperationUseCase {
 
     private final OperationRepositoryImpl operationRepository;
 
+    @Tool(name = "", description = "Persiste uma nova transação financeira")
     public OperationOutPut execute(OperationInput input){
         var operation = operationRepository.save(
                 new Operation(input.customerID(), input.description(), input.amount(), input.category()));

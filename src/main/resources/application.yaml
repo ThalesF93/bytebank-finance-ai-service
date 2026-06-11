@@ -12,8 +12,10 @@ spring:
       httpclient:
         hc5:
           enabled: true
+  main:
+    allow-circular-references: true
 
-#Database
+  #Database
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${DB_URL:jdbc:postgresql://localhost:5435/finance_ai_db}
@@ -29,10 +31,10 @@ spring:
     openai:
       api-key: ${OPENAI_API_KEY}
       chat:
-        model: gpy-4o-mini
+        model: gpt-4o-mini
       audio:
         transcription:
-          model: whiper-1
+          model: whisper-1
         speech:
           model: tts-1
           voice: alloy
