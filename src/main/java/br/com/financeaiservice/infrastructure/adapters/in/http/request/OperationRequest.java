@@ -6,9 +6,9 @@ import br.com.financeaiservice.domain.enums.Category;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public record OperationRequest(UUID customerId, String description, BigDecimal amount, Category category) {
+public record OperationRequest(String description, BigDecimal amount, Category category) {
 
-    public OperationInput toInput(){
-        return new OperationInput(customerId, description, amount, category);
+    public OperationInput toInput(String customerId){
+        return new OperationInput(UUID.fromString(customerId), description, amount, category);
     }
 }
