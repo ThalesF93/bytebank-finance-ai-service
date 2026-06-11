@@ -12,6 +12,7 @@ spring:
       httpclient:
         hc5:
           enabled: true
+
 #Database
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -22,6 +23,20 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+#OpenAI
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        model: gpy-4o-mini
+      audio:
+        transcription:
+          model: whiper-1
+        speech:
+          model: tts-1
+          voice: alloy
+
 
 #Discovery-Server
 eureka:
