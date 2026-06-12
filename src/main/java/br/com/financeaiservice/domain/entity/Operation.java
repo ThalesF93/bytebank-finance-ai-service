@@ -2,6 +2,8 @@ package br.com.financeaiservice.domain.entity;
 
 import br.com.financeaiservice.domain.enums.Category;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -47,5 +49,9 @@ public class Operation {
         this.description = description;
         this.amount = amount;
         this.category = category;
+    }
+
+    public Operation(@NotBlank String description, @Positive BigDecimal amount, Category category) {
+
     }
 }

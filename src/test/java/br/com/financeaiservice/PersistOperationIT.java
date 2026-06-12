@@ -26,12 +26,11 @@ class PersistOperationIT {
     @Test
     void shouldPersistOperationIntoDatabase() {
         OperationInput input = new OperationInput(
-                UUID.randomUUID(),
                 "Pix mercado",
                 new BigDecimal("50.00"),
                 Category.GAS);
 
-        var result = persistOperationUseCase.execute(input);
+        var result = persistOperationUseCase.execute(input, UUID.randomUUID());
 
         assertNotNull(result);
         assertNotNull(result.operationId());

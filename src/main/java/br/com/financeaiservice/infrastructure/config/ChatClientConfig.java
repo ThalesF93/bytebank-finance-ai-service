@@ -1,6 +1,7 @@
 package br.com.financeaiservice.infrastructure.config;
 
 
+import br.com.financeaiservice.application.usecase.PersistOperationToolUseCase;
 import br.com.financeaiservice.application.usecase.PersistOperationUseCase;
 import br.com.financeaiservice.application.usecase.ProcessAudioUseCase;
 import org.springframework.ai.chat.client.ChatClient;
@@ -23,18 +24,16 @@ public class ChatClientConfig {
 
     @Bean
     public ChatClient chatClient(OpenAiChatModel openAiChatModel,
-                                 PersistOperationUseCase persistOperationUseCase) throws IOException {
+                                 PersistOperationToolUseCase tool) throws IOException {
 
-        var options = OpenAiChatOptions.builder()
-                .model("gpt-4o-mini")
-                .temperature(0.0)
-                .responseFormat(OpenAiChatModel.ResponseFormat.builder().type(OpenAiChatModel.ResponseFormat.Type.TEXT).build())
-                .build();
 
         return ChatClient.builder(openAiChatModel)
-               // .defaultOptions(options)
                 .defaultSystem(systemPrompt.getContentAsString(Charset.defaultCharset()))
-                .defaultTools(persistOperationUseCase)
+                .defaultTools(tool)
+                .defaultOptions(OpenAiChatOptions.builder()
+                        .temperature(0.0)
+                        .model("gpt-4o-mini")
+                        .responseFormat(OpenAiChatModel.ResponseFormat.builder().type(OpenAiChatModel.ResponseFormat.Type.TEXT).build()))
                 .build();
     }
 
