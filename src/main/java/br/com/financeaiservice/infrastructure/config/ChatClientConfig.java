@@ -2,12 +2,9 @@ package br.com.financeaiservice.infrastructure.config;
 
 
 import br.com.financeaiservice.application.usecase.PersistOperationToolUseCase;
-import br.com.financeaiservice.application.usecase.PersistOperationUseCase;
-import br.com.financeaiservice.application.usecase.ProcessAudioUseCase;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;

@@ -13,7 +13,7 @@ public class LLMResponseService {
     private final ChatClient chatClient;
 
     public String llmResponse(String transcription){
-        log.info("Transcrição recebida: {}", transcription);
+        log.info("Transcription received: {}", transcription);
         return chatClient.prompt()
                 .user(transcription)
                 .call()
