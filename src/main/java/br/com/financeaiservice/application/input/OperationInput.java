@@ -10,8 +10,6 @@ import java.util.UUID;
 
 public record OperationInput(
 
-        UUID customerID,
-
         @NotBlank
         String description,
 
@@ -22,6 +20,6 @@ public record OperationInput(
 
 ) {
     public static Operation toEntity(OperationInput input){
-        return new Operation(input.customerID, input.description, input.amount, input.category);
+        return new Operation(input.description, input.amount, input.category);
     }
 }

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public record OperationRequest(String description, BigDecimal amount, Category category) {
 
-    public OperationInput toInput(String customerId){
-        return new OperationInput(UUID.fromString(customerId), description, amount, category);
+    public OperationInput toInput(){
+        return new OperationInput(description, amount, category);
     }
 }
