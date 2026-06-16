@@ -23,7 +23,7 @@ public class PersistOperationToolUseCase {
 
     @Tool(description = "Persists a new financial transaction")
     public OperationOutPut execute(OperationInput input) {
-        log.info("Tentando salvar operação. userId={}, description={}, amount={}, category={}",
+        log.info("Trying to save operation. userId={}, description={}, amount={}, category={}",
                 userContext.getUserId(), input.description(), input.amount(), input.category());
         var operation = operationRepository.save(
                 new Operation(UUID.fromString(userContext.getUserId()), input.description(), input.amount(), input.category())
