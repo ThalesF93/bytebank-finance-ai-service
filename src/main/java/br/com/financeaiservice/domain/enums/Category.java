@@ -11,5 +11,6 @@ public enum Category {
     SCHOOL,
     CHILDREN,
     PERSONAL,
-    MARKET
+    MARKET,
+    BANK_OPERATION;
 }

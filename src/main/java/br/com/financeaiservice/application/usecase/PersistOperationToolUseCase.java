@@ -21,7 +21,7 @@ public class PersistOperationToolUseCase {
     private final UserContext userContext;
 
 
-    @Tool(description = "Persiste uma nova transação financeira")
+    @Tool(description = "Persists a new financial transaction")
     public OperationOutPut execute(OperationInput input) {
         log.info("Tentando salvar operação. userId={}, description={}, amount={}, category={}",
                 userContext.getUserId(), input.description(), input.amount(), input.category());
