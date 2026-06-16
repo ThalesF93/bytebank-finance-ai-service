@@ -15,6 +15,22 @@ spring:
   main:
     allow-circular-references: true
 
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: finance-ai-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      properties:
+        spring.json.trusted.packages: "*"
+        max.poll.records: 50
+        max.poll.interval.ms: 300000
+        spring.json.type.mapping: transaction-created:br.com.financeaiservice.infrastructure.messaging.event.TransactionCreatedEvent
+    listener:
+      ack-mode: MANUAL_IMMEDIATE
+
   #Database
   datasource:
     driver-class-name: org.postgresql.Driver
