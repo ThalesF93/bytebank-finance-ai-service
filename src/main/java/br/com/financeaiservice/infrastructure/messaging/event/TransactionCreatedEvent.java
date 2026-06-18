@@ -2,6 +2,7 @@ package br.com.financeaiservice.infrastructure.messaging.event;
 
 import br.com.financeaiservice.domain.enums.Category;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,6 +16,6 @@ public record TransactionCreatedEvent(
         BigDecimal amount,
         LocalDateTime dateTime,
         String description
-) {
+) implements Serializable {
 
 }
