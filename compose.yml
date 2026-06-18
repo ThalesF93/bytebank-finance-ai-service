@@ -1,7 +1,7 @@
 services:
   database:
     image: postgres:16
-    container_name: finance_ai-db
+    container_name: finance-ai-db
     environment:
       POSTGRES_DB: finance_ai_db
       POSTGRES_USER: postgres
@@ -11,12 +11,29 @@ services:
     volumes:
       - operation_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d budget-db"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d finance_ai_db"]
       interval: 5s
       timeout: 5s
       retries: 5
     networks:
       - bytebank-net
+
+  finance-ai-service:
+    build: .
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      DB_URL: jdbc:postgresql://finance-ai-db:5432/finance_ai_db
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      REDIS_HOST: redis
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - bytebank-net
+
 networks:
   bytebank-net:
     external: true

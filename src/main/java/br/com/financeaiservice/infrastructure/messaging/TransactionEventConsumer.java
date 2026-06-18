@@ -4,7 +4,7 @@ import br.com.financeaiservice.application.input.OperationInput;
 import br.com.financeaiservice.application.usecase.PersistOperationUseCase;
 import br.com.financeaiservice.domain.enums.Category;
 import br.com.financeaiservice.infrastructure.client.AccountClient;
-import br.com.financeaiservice.infrastructure.exception.KafkaProcessingException;
+import br.com.financeaiservice.infrastructure.exception.customized_exceptions.KafkaProcessingException;
 import br.com.financeaiservice.infrastructure.messaging.event.TransactionCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +15,6 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.time.Duration;
 
@@ -48,18 +46,20 @@ public class TransactionEventConsumer {
             return;
         }
 
-
         var input = new OperationInput(event.type(), event.amount(), Category.BANK_OPERATION);
-        var customer = accountClient.findCustomerByAccountId(event.originAccountId());
 
         try {
+            log.info("Calling accounts-service for accountId={}", event.originAccountId());
+            var customer = accountClient.findCustomerByAccountId(event.originAccountId());
+            log.info("Received customer response: {}", customer);
             useCase.execute(input, customer.id());
             redisTemplate.opsForValue().set(idempotencyKey, "1", Duration.ofHours(24));
             ack.acknowledge();
             log.info("Operation persisted from Kafka event. transactionId={}", event.transactionId());
         } catch (Exception e) {
-            log.error("Error while processing event: {}", e.getMessage());
+            log.error("Error while processing event: {}", e.getMessage(), e);
             throw new KafkaProcessingException("Failed to process transaction event", e);
         }
     }
+
 }

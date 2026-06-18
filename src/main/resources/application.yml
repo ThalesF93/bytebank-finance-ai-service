@@ -1,0 +1,94 @@
+server:
+  port: 8085
+
+#Cloud
+spring:
+  application:
+    name: finance-ai-service
+  cloud:
+    discovery:
+      enabled: true
+    openfeign:
+      httpclient:
+        hc5:
+          enabled: true
+  main:
+    allow-circular-references: true
+
+    #Redis
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: 6379
+
+#kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: transaction-created:br.com.financeaiservice.infrastructure.messaging.event.TransactionCreatedEvent
+    consumer:
+      group-id: finance-ai-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      properties:
+        spring.json.trusted.packages: "*"
+        max.poll.records: 50
+        max.poll.interval.ms: 300000
+        spring.json.type.mapping: transaction-created:br.com.financeaiservice.infrastructure.messaging.event.TransactionCreatedEvent
+    listener:
+      ack-mode: MANUAL_IMMEDIATE
+
+  #Database
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL:jdbc:postgresql://finance-ai-db:5432/finance_ai_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  #OpenAI
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        model: gpt-4o-mini
+      audio:
+        transcription:
+          model: whisper-1
+        speech:
+          model: tts-1
+          voice: alloy
+
+
+#Discovery-Server
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://eureka-server:8761/eureka/}
+      register-with-eureka: true
+      fetch-registry: true
+  instance:
+    prefer-ip-address: true
+
+#Observability
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, metrics
+  tracing:
+    sampling:
+      probability: 1.0
+    export:
+      zipkin:
+        endpoint: http://zipkin:9411/api/v2/spans
+

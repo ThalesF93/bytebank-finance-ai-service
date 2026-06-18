@@ -25,7 +25,7 @@ public class KafkaConfig {
         var recoverer = new DeadLetterPublishingRecoverer(kafkaTemplate);
         var errorHandler = new DefaultErrorHandler(
                 recoverer,
-                new FixedBackOff(1000L, 3)  // 1s entre tentativas, máximo 3
+                new FixedBackOff(1000L, 3)
         );
 
         factory.setCommonErrorHandler(errorHandler);
