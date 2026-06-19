@@ -75,14 +75,16 @@ public class TransactionEventConsumer {
     }
 
     private void saveVector(TransactionCreatedEvent event, AccountResponse customer){
-        String description = String.format("Transação do tipo %s no valor de R$ %s para o cliente %s",
-                event.type(), event.amount(), customer.id());
+        String description = String.format("Transação do tipo %s no valor de R$ %s, em %s para o cliente %s. Descrição: %s",
+                event.type(), event.amount(), event.dateTime().toLocalDate() ,customer.id(), event.description());
 
         Document doc = new Document(description, Map.of(
                 "customerId", customer.id().toString(),
                 "transactionId", event.transactionId(),
                 "amount", event.amount(),
-                "type", event.type()
+                "type", event.type(),
+                "description", event.description(),
+                "date", event.dateTime().toLocalDate()
         ));
 
         vectorStore.add(List.of(doc));
