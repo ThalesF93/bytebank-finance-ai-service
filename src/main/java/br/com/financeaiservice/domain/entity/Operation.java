@@ -40,7 +40,7 @@ public class Operation {
     private Category category;
 
     @Column
-    @DateTimeFormat(pattern = "dd/MM/YYYY")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @CreationTimestamp
     private LocalDate date;
 
@@ -51,7 +51,4 @@ public class Operation {
         this.category = category;
     }
 
-    public Operation(@NotBlank String description, @Positive BigDecimal amount, Category category) {
-
-    }
 }

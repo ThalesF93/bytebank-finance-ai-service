@@ -1,5 +1,6 @@
 package br.com.financeaiservice.application.service;
 
+import br.com.financeaiservice.infrastructure.exception.customized_exceptions.AudioProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.audio.transcription.AudioTranscriptionPrompt;
@@ -36,9 +37,8 @@ public class TranscriptionService {
                 }
             };
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao ler o arquivo de áudio", e);
+            throw new AudioProcessingException("Error while reading file");
         }
-
 
         AudioTranscriptionPrompt prompt = new AudioTranscriptionPrompt(
                 audioResource,

@@ -3,8 +3,8 @@ package br.com.financeaiservice.application.usecase;
 import br.com.financeaiservice.application.input.OperationInput;
 import br.com.financeaiservice.application.output.OperationOutPut;
 import br.com.financeaiservice.domain.entity.Operation;
+import br.com.financeaiservice.domain.repository.OperationRepository;
 import br.com.financeaiservice.infrastructure.context.UserContext;
-import br.com.financeaiservice.infrastructure.database.OperationRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
@@ -21,7 +21,7 @@ import java.util.UUID;
 @Slf4j
 public class PersistOperationToolUseCase {
 
-    private final OperationRepositoryImpl operationRepository;
+    private final OperationRepository operationRepository;
     private final UserContext userContext;
     private final VectorStore vectorStore;
 
