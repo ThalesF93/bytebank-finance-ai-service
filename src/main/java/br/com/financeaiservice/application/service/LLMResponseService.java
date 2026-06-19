@@ -7,6 +7,7 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,12 +25,15 @@ public class LLMResponseService {
     public String llmResponse(String transcription){
         log.info("Transcription received: {}", transcription);
 
+        FilterExpressionBuilder filter = new  FilterExpressionBuilder();
+        var expression = filter.eq("customerId", userContext.getUserId()).build();
+
         List<Document> relevantDocs = vectorStore.similaritySearch(
                 SearchRequest.builder()
                         .query(transcription)
                         .topK(20)
                         .similarityThreshold(0.3)
-                        .filterExpression("customerId == '" + userContext.getUserId() +"'")
+                        .filterExpression(expression)
                         .build()
         );
 
@@ -37,25 +41,8 @@ public class LLMResponseService {
 
         log.info("RAG context retrieved. docs={}", relevantDocs.size());
 
-        String systemPrompt = """
-            Você é um assistente financeiro pessoal do ByteBank.
-            Responda sempre em português.
-            
-            Você tem acesso a duas capacidades:
-            
-            1. REGISTRAR transações: use a tool disponível quando o usuário
-               quiser registrar um gasto, depósito ou transferência.
-            
-            2. CONSULTAR transações: quando o usuário fizer uma pergunta sobre
-               seus gastos, use o contexto abaixo para responder.
-               Se não houver contexto suficiente, diga que não encontrou informações.
-            
-            Transações relevantes do usuário:
-            %s
-            """.formatted(context);
-
         return chatClient.prompt()
-                .system(systemPrompt)
+                .system(s -> s.param("context", context))
                 .user(transcription)
                 .call()
                 .content();
