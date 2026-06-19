@@ -3,6 +3,8 @@ package br.com.financeaiservice.infrastructure.config;
 
 import br.com.financeaiservice.application.usecase.PersistOperationToolUseCase;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,10 +23,11 @@ public class ChatClientConfig {
 
     @Bean
     public ChatClient chatClient(OpenAiChatModel openAiChatModel,
+                                 MessageWindowChatMemory chatMemory,
                                  PersistOperationToolUseCase tool) throws IOException {
 
-
         return ChatClient.builder(openAiChatModel)
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .defaultSystem(systemPrompt.getContentAsString(Charset.defaultCharset()))
                 .defaultTools(tool)
                 .defaultOptions(OpenAiChatOptions.builder()
