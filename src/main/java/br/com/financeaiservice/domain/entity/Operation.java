@@ -51,4 +51,6 @@ public class Operation {
         this.category = category;
     }
 
+    public Operation(@NotBlank String description, @Positive BigDecimal amount, Category category) {
+    }
 }
